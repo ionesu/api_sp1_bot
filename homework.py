@@ -58,8 +58,8 @@ def get_homework_statuses(current_timestamp):
     return homework_statuses.json()
 
 
-def send_message(message):
-    return bot.send_message(chat_id=CHAT_ID, text=message)
+def send_message(message, bot_client):
+    return bot_client.send_message(chat_id=CHAT_ID, text=message)
 
 
 def main():
@@ -69,7 +69,7 @@ def main():
         try:
             new_homework = get_homework_statuses(current_timestamp)
             if new_homework.get('homeworks'):
-                send_message(parse_homework_status(new_homework.get('homeworks')[0]))
+                send_message(parse_homework_status(new_homework.get('homeworks')[0]), bot)
             current_timestamp = new_homework.get('current_date')
             time.sleep(delay_get)
 
