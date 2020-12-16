@@ -22,6 +22,11 @@ DELAY_ERROR = 5
 
 def parse_homework_status(homework):
     homework_name = homework.get('homework_name')
+    if homework_name is None:
+        logging.error(
+            'Invalid response from the server. The server responded "{}".'.format(
+                homework_name))
+        return 'Wrong response from the server.'
     answer = {'rejected': 'К сожалению в работе нашлись ошибки.',
               'approved': ('Ревьюеру всё понравилось, можно '
                            'приступать к следующему уроку.')
@@ -41,7 +46,7 @@ def get_homework_statuses(current_timestamp):
     if current_timestamp is None:
         current_timestamp = int(time.time())
     headers = {'Authorization': f'OAuth {PRAKTIKUM_TOKEN}'}
-    url = URL_PRAKTIKUM.format('homework_statuses/')
+    url = '{}{}'.format(URL_PRAKTIKUM, 'homework_statuses/')
     try:
         homework_statuses = requests.get(url,
                                          params={
