@@ -1,7 +1,7 @@
-import json
 import logging
 import os
 import time
+import json
 
 import requests
 import telegram
@@ -22,11 +22,6 @@ DELAY_ERROR = 5
 
 def parse_homework_status(homework):
     homework_name = homework.get('homework_name')
-    if homework_name is None:
-        logging.error(
-            'Invalid response from the server. The server responded "{}".'.format(
-                homework_name))
-        return 'Wrong response from the server.'
     answer = {'rejected': 'К сожалению в работе нашлись ошибки.',
               'approved': ('Ревьюеру всё понравилось, можно '
                            'приступать к следующему уроку.')
