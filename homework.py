@@ -52,17 +52,14 @@ def get_homework_statuses(current_timestamp):
                                          params={
                                              'from_date': current_timestamp},
                                          headers=headers)
-
     except requests.exceptions.RequestException as e:
-        logging.error(f'Yandex server crashed with an error: {e}')
-    else:
-        try:
-            return homework_statuses.json()
-        except json.JSONDecodeError:
-            logging.error(
-                'The server responds, but the page returned from the site does not have json')
-    time.sleep(DELAY_ERROR)
-
+        logging.error(f'Connection crashed with an error: {e}')
+        return {}
+    except json.JSONDecodeError:
+        logging.error(
+            'The server responds, but the page returned from the site does not have json')
+        return {}
+    return homework_statuses.json()
 
 def send_message(message, bot_client):
     return bot_client.send_message(chat_id=CHAT_ID, text=message)
@@ -80,7 +77,7 @@ def main():
             time.sleep(DELAY_GET)
 
         except Exception as e:
-            print(f'Bot die with exception: {e}')
+            logging.error(f'Bot die with exception: {e}')
             time.sleep(DELAY_ERROR)
             continue
 
